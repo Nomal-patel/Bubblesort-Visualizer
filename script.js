@@ -8,7 +8,7 @@ const cols=[];
 const spacing=(myCanvas.width-margin*2)/n;
 const ctx=myCanvas.getContext("2d");
 
-const maxColumnHeight=800;
+const maxColumnHeight=785;
 
 init();
 
