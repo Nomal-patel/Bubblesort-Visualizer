@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 
 <head>
-    <title>Bubblesort Visualizer</title>
+    <title>Bubble Sorting Visualizer</title>
     <link rel="stylesheet" href="style.css"/>
 </head>
 
 <body>
-    <h1> Bubblesort Visualizer </h1>
-    <div id="container"></div>
+    <h1>Bubble Sorting Visualizer</h1>
+    <canvas id="myCanvas"></canvas>
 
     <hr>
 
     <div>
-        <button onClick="rand()">Randomize Array</button>
-        <button onClick="play()">Play</button>
+        <button onClick="init()">generate</button>
+        <button onClick="play()">play</button>
     </div>
 
+    <script src="math.js"></script>
+    <script src="column.js"></script>
     <script src="script.js"></script>
 </body>
 

@@ -1,64 +1,80 @@
-const n=50;
+myCanvas.width=1500;
+myCanvas.height=900;
+const margin=30;
+const n=30;
 const array=[];
+let moves=[];
+const cols=[];
+const spacing=(myCanvas.width-margin*2)/n;
+const ctx=myCanvas.getContext("2d");
 
-rand();
+const maxColumnHeight=800;
 
-function rand(){
+init();
+
+
+
+
+function init(){
     for(let i=0;i<n;i++){
         array[i]=Math.random();
     }
-    showBars();
+    moves=[];
+    for(let i=0;i<array.length;i++){
+        const x=i*spacing+spacing/2+margin;
+        const y=myCanvas.height-margin-i*3;
+        const width=spacing-4;
+        const height=maxColumnHeight*array[i];
+        cols[i]=new Column(x,y,width,height);
+    }
 }
 
 function play(){
-    const copy=[...array]
-    const moves=bubbbleSort(copy);
-    animate(moves);
-} 
-function animate(moves){
-    if(moves.length==0){
-        showBars()
-        return;
-    }
-    const move=moves.shift();
-    const[i,j]=move.indices;
-    
-    if(move.type=="swap"){
-    [array[i],array[j]]=[array[j],array[i]];
-    }
-    showBars(move);
-    setTimeout(function(){
-        animate(moves);
-    },20)
-}moves
+    moves=bubbleSort(array);
+}
 
-function bubbbleSort(array){
+animate();
+
+function bubbleSort(array){
     const moves=[];
     do{
-    var swapped=false;
-    for(let i=1; i<array.length; i++){
-        moves.push({indices:[i-1,i],type:"comp"});
-        if(array[i-1]>array[i]){
-            swapped=true;
-            moves.push({indices:[i-1,i],type:"swap"});
-            [array[i-1],array[i]]=[array[i],array[i-1]];
+        var swapped=false;
+        for(let i=1;i<array.length;i++){
+            if(array[i-1]>array[i]){
+                swapped=true;
+                [array[i-1],array[i]]=[array[i],array[i-1]];
+                moves.push(
+                    {indices:[i-1,i],swap:true}
+                );
+            }else{
+                moves.push(
+                    {indices:[i-1,i],swap:false}
+                );
+            }
         }
-    }
-}while(swapped);
-return moves;
+    }while(swapped);
+    return moves;
 }
 
-function showBars(move){
-    container.innerHTML="";
-    for(let i=0;i<array.length;i++){
-        const bar=document.createElement("div");
-        bar.style.height=array[i]*100+"%";
-        bar.classList.add("bar"); 
-        if(move && move.indices.includes(i)){
-            bar.style.backgroundColor=
-            move.type=="swap"?"#e23246":"#6906e2";
-        }
-        container.appendChild(bar);
+function animate(){
+    ctx.clearRect(0,0,myCanvas.width,myCanvas.height);
+    let changed=false;
+    for(let i=0;i<cols.length;i++){
+        changed=cols[i].draw(ctx)||changed;
     }
+
+    if(!changed && moves.length>0){
+        const move=moves.shift();
+        const [i,j]=move.indices;
+        if(move.swap){
+            cols[i].moveTo(cols[j]);
+            cols[j].moveTo(cols[i],-1);
+            [cols[i],cols[j]]=[cols[j],cols[i]];
+        }else{
+            cols[i].jump();
+            cols[j].jump();
+        }
+    }
+
+    requestAnimationFrame(animate);
 }
- 
