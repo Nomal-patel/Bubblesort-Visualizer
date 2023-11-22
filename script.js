@@ -1,5 +1,5 @@
-myCanvas.width=1500;
-myCanvas.height=900;
+myCanvas.width=1100;
+myCanvas.height=700;
 const margin=30;
 const n=30;
 const array=[];
@@ -8,7 +8,7 @@ const cols=[];
 const spacing=(myCanvas.width-margin*2)/n;
 const ctx=myCanvas.getContext("2d");
 
-const maxColumnHeight=785;
+const maxColumnHeight=600;
 
 init();
 
